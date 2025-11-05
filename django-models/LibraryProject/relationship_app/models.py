@@ -3,6 +3,22 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    published_date = models.DateField()
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        # Custom permissions to control who can add/change/delete Book instances
+        permissions = [
+            ("can_add_book", "Can add a new book"),
+            ("can_change_book", "Can edit an existing book"),
+            ("can_delete_book", "Can delete a book"),
+        ]
+
 class UserProfile(models.Model):
     ROLE_CHOICES = [
         ('Admin', 'Admin'),
@@ -26,16 +42,6 @@ class Author(models.Model):
 
     def __str__(self):
         return self.name
-
-
-class Book(models.Model):
-    title = models.CharField(max_length=100)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
-
-    def __str__(self):
-        return self.title
-
-
 class Library(models.Model):
     name = models.CharField(max_length=100)
     books = models.ManyToManyField(Book, related_name='libraries')
@@ -50,3 +56,5 @@ class Librarian(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
