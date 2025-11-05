@@ -6,8 +6,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 urlpatterns = [
     path('books/', list_books, name='list_books'),
     # Book create/edit/delete (secured by permission_required in views)
-    path('books/add/', views.add_book, name='book_add'),
-    path('books/<int:pk>/edit/', views.edit_book, name='book_edit'),
+    path('add_book/', views.add_book, name='add_book'),
+    path('edit_book/int:pk/', views.edit_book, name='edit_book'),
     path('books/<int:pk>/delete/', views.delete_book, name='book_delete'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),
 
