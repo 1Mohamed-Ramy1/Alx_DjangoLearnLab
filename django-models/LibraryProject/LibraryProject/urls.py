@@ -17,6 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.contrib import admin
+from django.urls import path, include  # <--- مهم
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('relationship_app.urls')),  # <--- ده يضيف كل روابط relationship_app
 ]
+
