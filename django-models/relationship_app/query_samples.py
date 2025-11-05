@@ -1,7 +1,8 @@
 from .models import Author, Book, Library, Librarian
 
 # List all books in a library.
-def list_books_in_library(library):
+def list_books_in_library(library_name):
+    library = Library.objects.get(name=library_name)
     return library.books.all()
 
 # Query all books by a specific author.
