@@ -22,6 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-&v2&zajgxscurg0c(yy3rx7@d-8iufn4mfiep(10@wp@59_)v+'
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -135,3 +136,31 @@ LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/books/'  
 LOGOUT_REDIRECT_URL = '/login/'  
 
+
+# ------------------------------
+# SECURITY BEST PRACTICES
+# ------------------------------
+
+DEBUG = False  # Disable in production
+
+# Browser security headers
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Protect against clickjacking
+X_FRAME_OPTIONS = 'DENY'
+
+# HTTPS-only cookies (production use)
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+# Content Security Policy (CSP)
+CSP_DEFAULT_SRC = ("'self'",)
+CSP_STYLE_SRC = ("'self'", "fonts.googleapis.com")
+CSP_SCRIPT_SRC = ("'self'",)
+
+# Add CSP middleware
+if 'csp.middleware.CSPMiddleware' not in MIDDLEWARE:
+    MIDDLEWARE += [
+        'csp.middleware.CSPMiddleware',
+    ]
