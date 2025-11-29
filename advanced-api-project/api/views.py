@@ -1,12 +1,14 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Book
 from .serializers import BookSerializer
 
 
 class BookListView(generics.ListAPIView):
     """
-    Generic list view for retrieving all Book instances.
+    Generic list view for retrieving all Book instances with filtering, searching, and ordering.
     
     HTTP Methods: GET
     Endpoint: GET /api/books/
@@ -14,17 +16,60 @@ class BookListView(generics.ListAPIView):
     Behavior:
     - Retrieves and returns a list of all books in JSON format.
     - Allows read-only access to all users (authenticated and unauthenticated).
+    - Supports filtering by title, author, and publication_year.
+    - Supports text search on title and author fields.
+    - Supports ordering by title and publication_year.
     
     Permissions:
     - IsAuthenticatedOrReadOnly: Unauthenticated users can view the list (GET),
       but cannot modify data.
     
     Serializer: BookSerializer
-    Queryset: All Book objects ordered by ID.
+    Queryset: All Book objects.
+    
+    Filter Backends:
+    - DjangoFilterBackend: Filter by title, author, publication_year
+    - SearchFilter: Search in title and author fields
+    - OrderingFilter: Sort by title and publication_year (default: ID)
+    
+    Query Parameters for Filtering:
+    - ?title=The+Hobbit → Filter books by exact title
+    - ?author=1 → Filter books by author ID
+    - ?publication_year=1937 → Filter books by exact publication year
+    
+    Query Parameters for Searching:
+    - ?search=Tolkien → Search for 'Tolkien' in title or author name
+    - ?search=1937 → Search for '1937' in title or author name
+    
+    Query Parameters for Ordering:
+    - ?ordering=title → Order results by title (ascending)
+    - ?ordering=-title → Order results by title (descending)
+    - ?ordering=publication_year → Order results by publication year (ascending)
+    - ?ordering=-publication_year → Order results by publication year (descending)
+    
+    Examples:
+    - GET /api/books/?title=The+Hobbit
+    - GET /api/books/?author=1&publication_year=1937
+    - GET /api/books/?search=Tolkien
+    - GET /api/books/?ordering=-publication_year
+    - GET /api/books/?search=Hobbit&ordering=title
     """
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    
+    # Configure filtering backends
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    
+    # Fields to filter on using DjangoFilterBackend
+    filterset_fields = ['title', 'author', 'publication_year']
+    
+    # Fields to search on using SearchFilter
+    search_fields = ['title', 'author__name']
+    
+    # Fields to order on using OrderingFilter
+    ordering_fields = ['title', 'publication_year']
+    ordering = ['id']  # Default ordering
 
 
 class BookDetailView(generics.RetrieveAPIView):

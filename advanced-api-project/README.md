@@ -123,6 +123,93 @@ All endpoints are prefixed with `/api/`.
        http://127.0.0.1:8000/api/books/1/delete/
   ```
 
+## Filtering, Searching, and Ordering
+
+The `/api/books/` endpoint supports advanced query capabilities for enhanced data retrieval.
+
+### Filtering
+
+Filter books by specific fields using query parameters:
+
+**Available filter fields:**
+- `title` — Filter by book title
+- `author` — Filter by author ID
+- `publication_year` — Filter by publication year
+
+**Examples:**
+```bash
+# Filter by title
+curl http://127.0.0.1:8000/api/books/?title=The+Hobbit
+
+# Filter by author ID
+curl http://127.0.0.1:8000/api/books/?author=1
+
+# Filter by publication year
+curl http://127.0.0.1:8000/api/books/?publication_year=1937
+
+# Combine multiple filters
+curl http://127.0.0.1:8000/api/books/?author=1&publication_year=1937
+```
+
+### Searching
+
+Perform full-text search across title and author name fields:
+
+**Searchable fields:**
+- `title` — Book title
+- `author__name` — Author's name
+
+**Examples:**
+```bash
+# Search for 'Tolkien' in title or author name
+curl http://127.0.0.1:8000/api/books/?search=Tolkien
+
+# Search for a book title
+curl http://127.0.0.1:8000/api/books/?search=Hobbit
+
+# Search for a publication year as text
+curl http://127.0.0.1:8000/api/books/?search=1937
+```
+
+### Ordering
+
+Sort results by specific fields in ascending or descending order:
+
+**Available ordering fields:**
+- `title` — Sort by book title
+- `publication_year` — Sort by publication year
+- Prefix with `-` for descending order (e.g., `-publication_year`)
+
+**Examples:**
+```bash
+# Sort by title (ascending)
+curl http://127.0.0.1:8000/api/books/?ordering=title
+
+# Sort by title (descending)
+curl http://127.0.0.1:8000/api/books/?ordering=-title
+
+# Sort by publication year (ascending)
+curl http://127.0.0.1:8000/api/books/?ordering=publication_year
+
+# Sort by publication year (descending, most recent first)
+curl http://127.0.0.1:8000/api/books/?ordering=-publication_year
+```
+
+### Combined Query Examples
+
+You can combine filtering, searching, and ordering:
+
+```bash
+# Search for 'Tolkien' and sort by title
+curl http://127.0.0.1:8000/api/books/?search=Tolkien&ordering=title
+
+# Filter by author ID and sort by publication year (descending)
+curl http://127.0.0.1:8000/api/books/?author=1&ordering=-publication_year
+
+# Search for a book and filter by publication year, sorted by title
+curl http://127.0.0.1:8000/api/books/?search=Hobbit&publication_year=1937&ordering=title
+```
+
 ## Authentication
 
 ### Token Authentication
