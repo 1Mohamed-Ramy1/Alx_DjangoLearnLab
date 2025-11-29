@@ -48,13 +48,13 @@ How to Run Tests:
 
 from django.test import TestCase
 from django.contrib.auth.models import User
-from rest_framework.test import APIClient
+from rest_framework.test import APIClient, APITestCase
 from rest_framework import status
 from .models import Author, Book
 from datetime import datetime
 
 
-class BookListViewTests(TestCase):
+class BookListViewTests(APITestCase):
     """Test cases for Book List View (GET /api/books/)"""
     
     def setUp(self):
@@ -145,7 +145,7 @@ class BookListViewTests(TestCase):
         self.assertEqual(years, sorted(years))
 
 
-class BookDetailViewTests(TestCase):
+class BookDetailViewTests(APITestCase):
     """Test cases for Book Detail View (GET /api/books/<id>/)"""
     
     def setUp(self):
@@ -171,7 +171,7 @@ class BookDetailViewTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
 
-class BookCreateViewTests(TestCase):
+class BookCreateViewTests(APITestCase):
     """Test cases for Book Create View (POST /api/books/create/)"""
     
     def setUp(self):
@@ -226,7 +226,7 @@ class BookCreateViewTests(TestCase):
         self.assertIn('publication_year', response.data)
 
 
-class BookUpdateViewTests(TestCase):
+class BookUpdateViewTests(APITestCase):
     """Test cases for Book Update View (PUT/PATCH /api/books/update/<id>/)"""
     
     def setUp(self):
@@ -281,7 +281,7 @@ class BookUpdateViewTests(TestCase):
         self.assertEqual(self.book.publication_year, 1937)  # Unchanged
 
 
-class BookDeleteViewTests(TestCase):
+class BookDeleteViewTests(APITestCase):
     """Test cases for Book Delete View (DELETE /api/books/delete/<id>/)"""
     
     def setUp(self):
