@@ -197,8 +197,8 @@ class BookCreateViewTests(APITestCase):
     
     def test_create_book_authenticated(self):
         """Test creating a book with authentication (should be allowed)"""
-        # Force authenticate user
-        self.client.force_authenticate(user=self.user)
+        # Log in user via session authentication
+        self.client.login(username='testuser', password='testpass123')
         
         book_data = {
             'title': 'New Book',
@@ -213,7 +213,7 @@ class BookCreateViewTests(APITestCase):
     
     def test_create_book_with_future_publication_year(self):
         """Test creating a book with future publication year (should be rejected)"""
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass123')
         
         future_year = datetime.now().year + 1
         book_data = {
@@ -253,7 +253,7 @@ class BookUpdateViewTests(APITestCase):
     
     def test_update_book_authenticated_full_update(self):
         """Test full update (PUT) with authentication"""
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass123')
         
         update_data = {
             'title': 'The Hobbit Revised',
@@ -269,7 +269,7 @@ class BookUpdateViewTests(APITestCase):
     
     def test_update_book_authenticated_partial_update(self):
         """Test partial update (PATCH) with authentication"""
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass123')
         
         update_data = {'title': 'The Hobbit - Special Edition'}
         response = self.client.patch(f'/api/books/update/{self.book.id}/', update_data)
@@ -310,7 +310,7 @@ class BookDeleteViewTests(APITestCase):
     
     def test_delete_book_authenticated(self):
         """Test deleting a book with authentication (should be allowed)"""
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass123')
         
         book_id = self.book.id
         response = self.client.delete(f'/api/books/delete/{book_id}/')
