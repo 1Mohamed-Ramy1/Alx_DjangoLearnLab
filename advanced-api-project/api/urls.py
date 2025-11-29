@@ -44,8 +44,8 @@ urlpatterns = [
     
     # Update an existing book (authenticated users only)
     # Supports both PUT (full update) and PATCH (partial update)
-    path('books/<int:pk>/update/', BookUpdateView.as_view(), name='book-update'),
+    path('books/update/<int:pk>/', BookUpdateView.as_view(), name='book-update'),
     
     # Delete an existing book (authenticated users only)
-    path('books/<int:pk>/delete/', BookDeleteView.as_view(), name='book-delete'),
+    path('books/delete/<int:pk>/', BookDeleteView.as_view(), name='book-delete'),
 ]
