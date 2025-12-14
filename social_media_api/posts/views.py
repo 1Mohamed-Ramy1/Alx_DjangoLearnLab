@@ -8,7 +8,7 @@ from .serializers import PostSerializer
 @permission_classes([IsAuthenticated]) 
 def feed(request):
     user = request.user
-    following_users = user.following.all() 
+    following_users = user.following_users.all()
     posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
     serializer = PostSerializer(posts, many=True)
     return Response(serializer.data)
