@@ -32,10 +32,6 @@ SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
-DEBUG = False
-SECRET_KEY = config('SECRET_KEY')
-ALLOWED_HOSTS = ['*']
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -151,17 +147,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-from pathlib import Path
-from decouple import config
-import dj_database_url
-import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = "test2020@"
 DEBUG = False
-ALLOWED_HOSTS = ['*']  # مؤقتًا، ممكن تغير للـ Heroku URL
+ALLOWED_HOSTS = ['*'] 
 
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
@@ -217,9 +209,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'social_media_api.wsgi.application'
 
 # Database
+import dj_database_url
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=config('DATABASE_URL')
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}"
     )
 }
 
